@@ -1,5 +1,6 @@
 def filter_movie_short(dirty_movies):
     filter_movies = []
+    print(dirty_movies)
     if dirty_movies.get("Response"):
         dirty_movies = dirty_movies.get("Search")
         for movie in dirty_movies:
