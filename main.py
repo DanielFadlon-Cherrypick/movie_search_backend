@@ -20,11 +20,15 @@ def create_app():
 
     @app.route('/movies/<movie_id>', methods=['GET', 'POST'])
     def movie_scr(movie_id):
-        movie = filter_movie_details(get_movie_by_id(movie_id))
-        print(movie)
         if request.method == 'GET':
+            movie = filter_movie_details(get_movie_by_id(movie_id))
             return json_response(movie)
+
+    @app.route('/add_to_favorites', methods=['POST'])
+    def add_favorite():
         if request.method == 'POST':
+            movie_id = request.args.get('movie_id')
+            movie = filter_movie_details(get_movie_by_id(movie_id))
             add_favorite_movie(movie)
             return json_response("SUCCESS")
 
