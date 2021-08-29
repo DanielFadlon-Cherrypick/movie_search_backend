@@ -19,3 +19,7 @@ def get_favorite_movies():
 
 def add_favorite_movie(favorite_movie):
     db['FavoriteMovies'].insert_one(favorite_movie)
+
+
+def delete_movie(movie_id):
+    db['FavoriteMovies'].delete_one({"id": movie_id})
