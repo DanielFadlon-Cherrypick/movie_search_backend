@@ -15,8 +15,11 @@ def create_app():
     def main_screen():
         if request.method == 'GET':
             search_value = request.args.get('value')
-            movies = filter_movie_short(search_movies_by_title(search_value))
-            return json_response(movies)
+            movies = search_movies_by_title(search_value)
+            if movies['Response'] == 'False':
+                return json_response([])
+
+            return json_response(filter_movie_short(movies))
 
     @app.route('/movies/<movie_id>', methods=['GET', 'POST'])
     def movie_scr(movie_id):
