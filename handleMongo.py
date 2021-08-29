@@ -18,6 +18,10 @@ def get_favorite_movies():
 
 
 def add_favorite_movie(favorite_movie):
+    movies = get_favorite_movies()
+    for movie in movies:
+        if movie['id'] == favorite_movie['id']:
+            return
     db['FavoriteMovies'].insert_one(favorite_movie)
 
 
