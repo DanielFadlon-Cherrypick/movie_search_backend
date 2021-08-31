@@ -13,41 +13,61 @@ def create_app():
 
     @app.route('/movies', methods=['GET'])
     def search_movie():
-        if request.method == 'GET':
+        try:
             search_value = request.args.get('value')
             movies = search_movies_by_title(search_value)
-            if movies['Response'] == 'False':
-                return json_response([])
+        except Exception as err:
+            return error_response(err, 500)
 
-            return json_response(filter_movie_short(movies))
+        if movies['Response'] == 'False':
+            return json_response([])
 
-    @app.route('/movies/<movie_id>', methods=['GET', 'POST'])
+        return json_response(filter_movie_short(movies))
+
+    @app.route('/movies/<movie_id>', methods=['GET'])
     def get_movie(movie_id):
-        if request.method == 'GET':
-            movie = filter_movie_details(get_movie_by_id(movie_id))
-            return json_response(movie)
+        try:
+            movie = get_movie_by_id(movie_id)
+            if movie is None:
+                return error_response("Movie Not Found! probably, wrong movie_id number", 400)
+            return json_response(filter_movie_details(movie))
+        except Exception as err:
+            return error_response(err, 500)
 
     @app.route('/add_to_favorites', methods=['POST'])
     def add_favorite():
-        if request.method == 'POST':
+        try:
             movie_id = request.args.get('movie_id')
-            movie = filter_movie_details(get_movie_by_id(movie_id))
-            add_favorite_movie(movie)
+            movie = get_movie_by_id(movie_id)
+            if movie is None:
+                return error_response("Movie Not Found! probably, wrong movie_id number", 400)
+
+            add_favorite_movie(filter_movie_details(movie))
             return json_response("SUCCESS")
+        except Exception as err:
+            return error_response(err, 500)
 
     @app.route('/favorites', methods=['GET'])
     def get_favorites():
-        if request.method == 'GET':
-            return json_response(get_favorite_movies())
+        try:
+            collection = get_favorite_movies()
+            return json_response(collection)
+        except Exception as err:
+            return error_response(err, 500)
 
     @app.route('/delete_movie_from_favorites', methods=['POST'])
     def delete_movie_from_favorites():
-        if request.method == 'POST':
+        try:
             movie_id = request.args.get('movie_id')
             delete_movie(movie_id)
             return json_response("SUCCESS")
+        except Exception as err:
+            return error_response(err, 500)
 
     def json_response(payload, status=200):
         return json.dumps(payload), status, {'content-type': 'application/json'}
+
+    def error_response(err, status):
+        return {"error": str(err)}, status, {'content-type': 'application/json'}
 
     return app

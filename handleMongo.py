@@ -10,7 +10,10 @@ db = client.movies
 
 def get_favorite_movies():
     collection_items = []
-    data = db['FavoriteMovies'].find({})
+    try:
+        data = db['FavoriteMovies'].find({})
+    except Exception as err:
+        raise err
     for item in data:
         item.pop('_id')
         collection_items.append(item)
@@ -26,4 +29,7 @@ def add_favorite_movie(favorite_movie):
 
 
 def delete_movie(movie_id):
-    db['FavoriteMovies'].delete_one({"id": movie_id})
+    try:
+        db['FavoriteMovies'].delete_one({"id": movie_id})
+    except Exception as err:
+        raise err
