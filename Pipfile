@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 pymongo = {extras = ["srv"], version = "*"}
+gunicorn = "*"
+requests = "*"
+flask = "*"
+flask-cors = "*"
 
 [dev-packages]
 
