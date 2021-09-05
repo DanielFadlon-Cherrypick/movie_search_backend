@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 # connect to database
 client = MongoClient(
-    'mongodb+srv://dbUser:DF18traindata@cluster0.impm7.mongodb.net/movies?retryWrites=true&w=majority&authSource=admin'
+    'mongodb+srv://dbUser:DF18traindata@cluster0.impm7.mongodb.net/movies?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE&authSource=admin'
 )
 
 db = client.movies
